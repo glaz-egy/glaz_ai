@@ -1,6 +1,8 @@
 import twitter
 import configparser
+import sys
 import re
+import os
 
 config = configparser.ConfigParser()
 config.read('api.ini')
@@ -12,14 +14,14 @@ api = twitter.Api(consumer_key=config['OAuth']['consumer_key'],\
 
 def get_tweet(count=200):
     statuse = api.GetUserTimeline(config['User']['user_id'], count=count)
-    with open('textdata.txt', 'r', encoding='utf-8') as f:
+    with open('textdata.txt', 'w+', encoding='utf-8') as f:
         ExistData = f.readlines()
     for s in statuse:
         MucthText = re.search(r"@.*\s", s.text)
         if MucthText is None: texts = s.text
         else:
-            text = MucthText.string.replace(" ", "")
-            text = text.replace("@", "")
+            texts = MucthText.string.replace(" ", "")
+            texts = texts.replace("@", "")
         MucthText = re.search(r"http.*", texts)
         texts = texts if MucthText is None else texts.replace(MucthText.group(0), '')
         MucthText = re.search(r"#.*", texts)

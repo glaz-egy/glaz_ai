@@ -52,11 +52,9 @@ function main()
             append!(datalist, DataCreate(text, num=num))
         end
         str = Markov(datalist, num=num)
-        run(`python post_tweet.py $str`)
+        println(str)
+        #run(`python post_tweet.py $str`)
     end
 end
 
-while true
-    sleep(10)
     main()
-end
