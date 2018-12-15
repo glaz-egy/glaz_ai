@@ -53,8 +53,11 @@ function main()
         end
         str = Markov(datalist, num=num)
         println(str)
-        #run(`python post_tweet.py $str`)
+        run(`python post_tweet.py $str`)
     end
 end
 
+while true
     main()
+    sleep(900)
+end
