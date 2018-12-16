@@ -12,9 +12,23 @@ api = twitter.Api(consumer_key=config['OAuth']['consumer_key'],\
                 access_token_key=config['OAuth']['access_token_key'],\
                 access_token_secret=config['OAuth']['access_token_secret'])
 
+def auto_follow():
+    try:
+        Followers = api.GetFollowers()
+        Friends = api.GetFriends()
+        for follower in Followers:
+            if not follower in Friends:
+                api.CreateFriendship(user_id=follower.id)
+    except:
+        exit(0)
+
 def get_tweet(count=200):
     try:
-        statuse = api.GetUserTimeline(config['User']['user_id'], count=count)
+        if '@' in config['User']['user_id']: UserId = config['User']['user_id'].split('@')
+        else: UserId = [config['User']['user_id']]
+        statuse = []
+        for user in UserId:
+            statuse.extend(api.GetUserTimeline(user.strip(), count=count))
         if not os.path.isfile('textdata.txt'):
             with open('textdata.txt', 'w') as f:
                 pass
@@ -39,6 +53,7 @@ def get_tweet(count=200):
                             f.write(text+'\n')
     except:
         exit(0)
+    auto_follow()
 
 if __name__=='__main__':
     get_tweet()
