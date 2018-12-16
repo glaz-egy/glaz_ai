@@ -43,7 +43,7 @@ function Markov(data; num=2)
 end
 
 function main()
-    num=3
+    num=2
     run(`python get_tweet.py`)
     open("textdata.txt", "r") do fp
         textdata = readlines(fp)
@@ -59,5 +59,5 @@ end
 
 while true
     main()
-    sleep(900)
+    sleep(600)
 end
