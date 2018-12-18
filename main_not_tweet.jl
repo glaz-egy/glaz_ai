@@ -50,10 +50,10 @@ open("textdata.txt", "r") do fp
     end
     while true
         n = readline()
-        if n == "n"
-            println(Markov(datalist))
+        if n == "e"
+            break
         else
-            break         
+            println(Markov(datalist))         
         end
     end
 end

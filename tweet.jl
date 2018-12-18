@@ -3,7 +3,6 @@ include("configparser.jl")
 
 using .configparser
 using Twitter
-using JLD2
 
 export init, UpdateTextData, PostTweet
 
