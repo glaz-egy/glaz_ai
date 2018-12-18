@@ -4,35 +4,7 @@ include("configparser.jl")
 using .configparser
 using Twitter
 
-export init, UpdateTextData, PostTweet
-
-function init()
-    config = Read("api.ini")
-    NeedKeys = ["CK", "CS", "AT", "ATS"]
-    KeyDict = Dict("CK" => "0", "CS" => "0", "AT" => "0", "ATS" => "0")
-    f = jldopen("api.conf", "a+")
-    for key in NeedKeys
-        if !haskey(f, key)
-            print("Your $key please: ")
-            input = readline()
-            f[key] = input
-            KeyDict[key] = input
-        else
-            KeyDict[key] = f[key]
-        end
-    end
-    if !haskey(f, "ID")
-        print("Your ID please: ")
-        input = readline()
-        f["ID"] = input
-        ID = input
-    else
-        ID = f["ID"]
-    end
-    ID = split(ID, "@")
-    close(f)
-    return (KeyDict, ID)
-end
+export UpdateTextData, PostTweet, AutoFollow
 
 function TweetText(timelines)
     returnlist = []

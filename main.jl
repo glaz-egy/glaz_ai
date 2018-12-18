@@ -48,23 +48,29 @@ end
 
 function main()
     num = 3
+    AutoFollow()
     textdata = UpdateTextData()
     datalist = []
     for text in textdata
         append!(datalist, DataCreate(text, num=num))
     end
     str = Markov(datalist, num=num)
+    if in(str, textdata)
+        while in(str, textdata)
+            str = Markov(datalist, num=num)
+        end
+    end
     println(str)
     PostTweet(str)
 end
 
 while true
-    #try
+    try
         println(now())
         main()
-    #catch err
-    #    println("Can't Post tweet")
-    #    println(err)
-    #end
+    catch err
+        println("Can't Post tweet")
+        println(err)
+    end
     sleep(600)
 end
