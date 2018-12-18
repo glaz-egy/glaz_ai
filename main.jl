@@ -1,4 +1,7 @@
+include("tweet.jl")
+
 using MeCab
+using .tweet
 
 function next(datalist, startstring; BOS=false, num=2)
     if num == 2
@@ -44,17 +47,14 @@ end
 
 function main()
     num=2
-    run(`python get_tweet.py`)
-    open("textdata.txt", "r") do fp
-        textdata = readlines(fp)
-        datalist = []
-        for text in textdata
-            append!(datalist, DataCreate(text, num=num))
-        end
-        str = Markov(datalist, num=num)
-        println(str)
-        run(`python post_tweet.py $str`)
+    textdata = UpdateTextData()
+    datalist = []
+    for text in textdata
+        append!(datalist, DataCreate(text, num=num))
     end
+    str = Markov(datalist, num=num)
+    println(str)
+    PostTweet(str)
 end
 
 while true
