@@ -84,9 +84,7 @@ function AppendFile(filename, text)
     end
 end
 
-function ReadFile(filename)
-    filedata = filename
-end
+ReadFile(filename) = readlines(filename)
 
 function UpdateTextData()
     Textdata = ReadFile("textdata.txt")

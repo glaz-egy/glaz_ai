@@ -59,12 +59,12 @@ function main()
 end
 
 while true
-    try
+    #try
         println(now())
         main()
-    catch err
-        println("Can't Post tweet")
-        println(err)
-    end
+    #catch err
+    #    println("Can't Post tweet")
+    #    println(err)
+    #end
     sleep(600)
 end
