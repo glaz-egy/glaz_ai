@@ -20,7 +20,7 @@ module tweet
             end
         end
         if !haskey(f, "ID")
-            print("Your ID pleace: ")
+            print("Your ID please: ")
             input = readline()
             f["ID"] = input
             ID = input
