@@ -1,5 +1,6 @@
 include("tweet.jl")
 
+using Dates
 using MeCab
 using .tweet
 
@@ -40,13 +41,13 @@ function Markov(data; num=2)
         if length(out) > 140
             i = 0
             nextstring = next(data, ["BOS"], BOS=true, num=num)
-            out = (nextstring[1] == "BOS" ? "" : nextstring[1]) * nextstring[2]
+            out = nextstring[1] == "BOS" ? "" : nextstring[1]
         end
     end
 end
 
 function main()
-    num=2
+    num = 3
     textdata = UpdateTextData()
     datalist = []
     for text in textdata
@@ -58,6 +59,12 @@ function main()
 end
 
 while true
-    main()
+    try
+        println(now())
+        main()
+    catch err
+        println("Can't Post tweet")
+        println(err)
+    end
     sleep(600)
 end

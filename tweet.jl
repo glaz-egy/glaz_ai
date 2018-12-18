@@ -38,10 +38,7 @@ function TweetText(timelines)
         if timeline.retweeted_status == Nothing() && match(r"さん(より|から)", timeline.text) == Nothing()
             text = replace(timeline.text, r"http.*" => "")
             text = replace(text, r"#" => "")
-            matchtext = match(r"@.*\s", text)
-            if matchtext != Nothing()
-                text = replace(text, string(matchtext.match) => replace(string(matchtext.match), r"[@\s]" => ""))
-            end
+            text = replace(text, r"@.*\s" => "")
             push!(returnlist, text)
         end
     end
