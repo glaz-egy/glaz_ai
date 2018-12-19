@@ -1,8 +1,10 @@
 include("tweet.jl")
+include("configparser.jl")
 
 using Dates
 using MeCab
 using .tweet
+using .configparser
 
 function next(datalist, startstring; BOS=false, num=2)
     if num == 2
@@ -47,7 +49,7 @@ function Markov(data; num=2)
 end
 
 function main()
-    num = 3
+    num = ConfInt(config["CONF"]["num"])
     AutoFollow()
     textdata = UpdateTextData()
     datalist = []
@@ -57,12 +59,15 @@ function main()
     str = Markov(datalist, num=num)
     if in(str, textdata)
         while in(str, textdata)
+            println("fail text: $str")
             str = Markov(datalist, num=num)
         end
     end
     println(str)
     PostTweet(str)
 end
+
+const config = Read("bot.ini")
 
 while true
     try
@@ -72,5 +77,5 @@ while true
         println("Can't Post tweet")
         println(err)
     end
-    sleep(600)
+    sleep(ConfInt(config["CONF"]["time"]))
 end

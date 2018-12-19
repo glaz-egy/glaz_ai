@@ -84,6 +84,6 @@ end
 
 GetLimit() = get_application_rate_limit_status()
 
-config = Read("api.ini")
+const config = Read("api.ini")
 twitterauth(config["OAuth"]["consumer_key"], config["OAuth"]["consumer_secret"], config["OAuth"]["access_token_key"], config["OAuth"]["access_token_secret"])
 end
