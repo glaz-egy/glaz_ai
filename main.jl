@@ -49,7 +49,6 @@ function Markov(data; num=2)
 end
 
 function main()
-    num = ConfInt(config["CONF"]["num"])
     AutoFollow()
     textdata = UpdateTextData()
     datalist = []
@@ -68,6 +67,7 @@ function main()
 end
 
 const config = Read("bot.ini")
+const num = ConfInt(config["CONF"]["num"])
 
 while true
     try

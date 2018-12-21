@@ -6,6 +6,10 @@ using Twitter
 
 export UpdateTextData, PostTweet, AutoFollow
 
+GetLimit() = get_application_rate_limit_status()
+PostTweet(text) = post_status_update(status=text)
+ReadFile(filename) = readlines(filename)
+
 function TweetText(timelines)
     returnlist = []
     for timeline in timelines
@@ -17,10 +21,6 @@ function TweetText(timelines)
         end
     end
     return returnlist
-end
-
-function PostTweet(text)
-    post_status_update(status=text)
 end
 
 function GetTweet(;count=50)
@@ -56,8 +56,6 @@ function AppendFile(filename, text)
     end
 end
 
-ReadFile(filename) = readlines(filename)
-
 function UpdateTextData()
     Textdata = ReadFile("textdata.txt")
     textlist = GetTweet()
@@ -81,8 +79,6 @@ function UpdateTextData()
     end
     return Textdata
 end
-
-GetLimit() = get_application_rate_limit_status()
 
 const config = Read("api.ini")
 twitterauth(config["OAuth"]["consumer_key"], config["OAuth"]["consumer_secret"], config["OAuth"]["access_token_key"], config["OAuth"]["access_token_secret"])
