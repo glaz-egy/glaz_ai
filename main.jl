@@ -68,6 +68,7 @@ end
 
 const config = Read("bot.ini")
 const num = ConfInt(config["CONF"]["num"])
+const time = ConfInt(config["CONF"]["time"])
 
 while true
     try
@@ -77,5 +78,5 @@ while true
         println("Can't Post tweet")
         println(err)
     end
-    sleep(ConfInt(config["CONF"]["time"]))
+    sleep(time)
 end

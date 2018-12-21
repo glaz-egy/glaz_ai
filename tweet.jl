@@ -56,9 +56,9 @@ function AppendFile(filename, text)
     end
 end
 
-function UpdateTextData()
+function UpdateTextData(;count=50)
     Textdata = ReadFile("textdata.txt")
-    textlist = GetTweet()
+    textlist = GetTweet(count=count)
     for text in textlist
         texts = split(text, "\n")
         if string(typeof(text)) != "SubString{String}"
