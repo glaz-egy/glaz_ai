@@ -47,8 +47,8 @@ function Markov(data, nowhash; num=2)
             return out, marklist
         end
         out *= nextstring[2]
-        marklist *= nowhash*string(all)*"\n"
         all, nextstring = next(data, nextstring, num=num)
+        marklist *= nowhash*string(all)*"\n"
         if length(out) > 140
             i = 0
             all, nextstring = next(data, ["BOS"], BOS=true, num=num)
