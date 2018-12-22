@@ -4,3 +4,5 @@ textdata\.txt
 *.ini
 
 api\.conf
+
+*.log

@@ -6,6 +6,12 @@ using MeCab
 using .tweet
 using .configparser
 
+function logwrite(file, logtext)
+    open(file, "a") do f
+        write(f, logtext)
+    end
+end
+
 function next(datalist, startstring; BOS=false, num=2)
     if num == 2
         next =  rand([data for data in datalist if BOS ? data[1] == startstring[1] : data[1] == startstring[2]])
@@ -13,7 +19,7 @@ function next(datalist, startstring; BOS=false, num=2)
         next =  rand([data for data in datalist if (data[1] == startstring[1]) && (BOS || data[2] == startstring[2])])
     end
     println(next)
-    return num == 2 ? next : next[2:3]
+    return next, (num == 2 ? next : next[2:3])
 end
 
 function DataCreate(texts; num=2)
@@ -31,52 +37,60 @@ function DataCreate(texts; num=2)
     return data
 end
 
-function Markov(data; num=2)
-    nextstring = next(data, ["BOS"], BOS=true, num=num)
+function Markov(data, nowhash; num=2)
+    marklist = ""
+    all, nextstring = next(data, ["BOS"], BOS=true, num=num)
     out = nextstring[1] == "BOS" ? "" : nextstring[1]
+    marklist *= nowhash*string(all)*"\n"
     while true
         if nextstring[2] == "EOS"
-            return out
+            return out, marklist
         end
         out *= nextstring[2]
-        nextstring = next(data, nextstring, num=num)
+        marklist *= nowhash*string(all)*"\n"
+        all, nextstring = next(data, nextstring, num=num)
         if length(out) > 140
             i = 0
-            nextstring = next(data, ["BOS"], BOS=true, num=num)
+            all, nextstring = next(data, ["BOS"], BOS=true, num=num)
             out = nextstring[1] == "BOS" ? "" : nextstring[1]
+            marklist *= nowhash*string(all)*"\n"
         end
     end
 end
 
-function main()
-    AutoFollow()
+function main(nowhash)
+    #AutoFollow()
     textdata = UpdateTextData()
     datalist = []
     for text in textdata
         append!(datalist, DataCreate(text, num=num))
     end
-    str = Markov(datalist, num=num)
+    str, processes = Markov(datalist, nowhash, num=num)
     if in(str, textdata)
         while in(str, textdata)
             println("fail text: $str")
-            str = Markov(datalist, num=num)
+            logwrite("ai.log", processes*nowhash*" fail text: $str\n")
+            str, processes = Markov(datalist, nowhash, num=num)
         end
     end
     println(str)
-    PostTweet(str)
+    logwrite("ai.log", processes*nowhash*" success: $str\n")
+    #PostTweet(str)
 end
 
 const config = Read("bot.ini")
 const num = ConfInt(config["CONF"]["num"])
 const time = ConfInt(config["CONF"]["time"])
 
-while true
-    try
-        println(now())
-        main()
-    catch err
+#while true
+    #try
+        nowtime = "["*string(now())*"]"
+        timehash = "["*string(hash(nowtime), base=16)*"]"
+        println(nowtime)
+        main(nowtime*timehash)
+    #=catch err
         println("Can't Post tweet")
         println(err)
     end
-    sleep(time)
-end
+    sleep(time)=#
+#end
