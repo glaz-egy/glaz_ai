@@ -59,7 +59,7 @@ function Markov(data, nowhash; num=2)
 end
 
 function main(nowhash)
-    #AutoFollow()
+    AutoFollow()
     textdata = UpdateTextData()
     datalist = []
     for text in textdata
@@ -75,22 +75,22 @@ function main(nowhash)
     end
     println(str)
     logwrite("ai.log", processes*nowhash*" success: $str\n")
-    #PostTweet(str)
+    PostTweet(str)
 end
 
 const config = Read("bot.ini")
 const num = ConfInt(config["CONF"]["num"])
 const time = ConfInt(config["CONF"]["time"])
 
-#while true
-    #try
+while true
+    try
         nowtime = "["*string(now())*"]"
         timehash = "["*string(hash(nowtime), base=16)*"]"
         println(nowtime)
         main(nowtime*timehash)
-    #=catch err
+    catch err
         println("Can't Post tweet")
         println(err)
     end
-    sleep(time)=#
-#end
+    sleep(time)
+end
